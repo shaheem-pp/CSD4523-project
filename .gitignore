@@ -1,0 +1,43 @@
+# Ignore Python bytecode and compiled files
+__pycache__/
+*.py[cod]
+
+# Ignore SQLite database file
+db.sqlite3
+
+# Ignore environment files
+*.env
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Python virtual environment directory
+venv/
+.venv/
+
+# Ignore log files
+*.log
+
+# Ignore editor/IDE specific files
+.vscode/
+.idea/
+
+# Ignore compiled C extensions
+*.so
+
+# Ignore packages
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+
+# Ignore the node_modules directory, if using Node.js
+node_modules/
+
+# Ignore Python egg cache
+.eggs/
+
+# Ignore static files
+staticfiles/
+media/
