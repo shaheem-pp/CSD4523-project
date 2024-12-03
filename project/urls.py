@@ -5,7 +5,7 @@ from django.urls import path
 from django.urls.conf import include
 
 urlpatterns = [
-    path('admin/dashboard/', admin.site.urls),
+    path("admin/", admin.site.urls),
 ]
 
 # Serve static and media files during development
