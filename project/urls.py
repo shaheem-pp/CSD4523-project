@@ -6,11 +6,6 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/dashboard/', admin.site.urls),
-    # Add your app URLs here
-    # path('', include('my_app.urls')),  # Example for including app URLs
-
-    # Include API URLs if using Django REST Framework
-    path('api/', include('api.urls')),  # Uncomment if you have an `api` app
 ]
 
 # Serve static and media files during development

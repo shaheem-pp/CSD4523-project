@@ -5,12 +5,8 @@ from pathlib import Path
 import environ
 
 # Initialize environment variables
-env = environ.Env(
-    DEBUG=(bool, False),
-    USE_TZ=(bool, True),
-    TIME_ZONE=(str, 'UTC')
-)
-environ.Env.read_env(os.path.join(Path(__file__).resolve().parent, '.env'))
+env = environ.Env(DEBUG=(bool, False), USE_TZ=(bool, True), TIME_ZONE=(str, "UTC"))
+environ.Env.read_env(os.path.join(Path(__file__).resolve().parent, ".env"))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,21 +25,20 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    "rest_framework",
-    "api",
+    "appAuth",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'project.urls'
+ROOT_URLCONF = "project.urls"
 
 TEMPLATES = [
     {
@@ -61,52 +56,29 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project.wsgi.application'
+WSGI_APPLICATION = "project.wsgi.application"
 
 # Database configuration
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE"),
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
-}
-
-# REST Framework settings
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    # Uncomment and configure pagination if needed
-    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    # "PAGE_SIZE": 10,
-}
-
-# Simple JWT settings
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
-    # Uncomment if you need to configure more JWT settings
-    # "ROTATE_REFRESH_TOKENS": False,
-    # "BLACKLIST_AFTER_ROTATION": True,
 }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -130,7 +102,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Uncomment if using custom user model
-# AUTH_USER_MODEL = "api.User"
+AUTH_USER_MODEL = "appAuth.CustomUser"
 
 # Security settings
 # Uncomment and configure if deploying behind a proxy
