@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "appAuth",
+    "appRecipe",
+    "appUser",
 ]
 
 MIDDLEWARE = [

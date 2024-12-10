@@ -10,7 +10,6 @@ from django.contrib.auth.models import (
 )
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
@@ -75,7 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         upload_to=get_file_path, null=True, blank=True, default="user/default.jpg"
     )
     designation = models.TextField(null=True, blank=True)
-    created_on = models.DateTimeField(default=timezone.now)
+    created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
     is_staff = models.BooleanField(
