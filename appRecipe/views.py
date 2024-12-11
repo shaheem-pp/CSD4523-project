@@ -1,8 +1,12 @@
-from django.http import HttpResponse
 from django.shortcuts import render
+
+from appRecipe.models import Category
+
 
 # Create your views here.
 
 
 def home(request):
-    return HttpResponse("<h1>Hello World - recipe</h1>")
+    categories = Category.objects.filter(is_deleted=False)
+    context = {"title": "Recime | The Recipe App", "categories": categories}
+    return render(request, "appRecipe/home.html", context=context)

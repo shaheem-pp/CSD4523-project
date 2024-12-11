@@ -23,6 +23,7 @@ def get_random_string():
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
 
