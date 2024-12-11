@@ -1,22 +1,7 @@
-# Django Template
-
-This repository serves as a basic template for quickly setting up a Django project with environment variables and structured project folders.
-
-## Features
-
-- Pre-configured `.env` file for environment variables.
-- Basic project structure for a Django app with `api` module.
-- Easy-to-install dependencies via `requirements.txt`.
-- A guide for generating a secret key and running the Django server.
-
-
-## Getting Started
-
-
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/shaheem-pp/django-template.git
-cd django-template
+git clone https://github.com/shaheem-pp/CSD4523-project.git
+cd CSD4523-project
 ```
 
 
@@ -24,17 +9,11 @@ cd django-template
 
 Create a `.env` file in the project directory and populate it with your project-specific values:
 ```env
-SECRET_KEY=YOUR_KEY_HERE
-DEBUG=YOUR_KEY_HERE
-ALLOWED_HOSTS=YOUR_KEY_HERE
-DB_ENGINE=YOUR_KEY_HERE
-DB_NAME=YOUR_KEY_HERE
-DB_USER=YOUR_KEY_HERE
-DB_PASSWORD=YOUR_KEY_HERE
-DB_HOST=YOUR_KEY_HERE
-DB_PORT=YOUR_KEY_HERE
-TIME_ZONE=YOUR_KEY_HERE
-USE_TZ=YOUR_KEY_HERE
+SECRET_KEY=YOUR_SECRET_KEY
+DEBUG=YOUR_DEBUG
+ALLOWED_HOSTS=YOUR_ALLOWED_HOSTS
+USE_TZ=YOUR_USE_TZ
+TIME_ZONE=YOUR_TIME_ZONE
 ```
 
 
@@ -67,33 +46,21 @@ python manage.py runserver
 ```text
 .
 ├── README.md
-├── api
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── migrations
-│   │   └── __init__.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
+├── appAuth/
+├── appRecipe/
+├── appUser/
+├── assets/
+├── customUtils.py
+├── db.sqlite3
 ├── manage.py
-├── project
-│   ├── __init__.py
-│   ├── asgi.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
+├── media/
+├── project/
 └── requirements.txt
 
-4 directories, 16 files
+8 directories, 5 files
 ```
 
-## Contributing
-
-Feel free to contribute by submitting a pull request.
-
-
 ## Author
-
-- **Shaheem P P** - [LinkedIn](https://www.linkedin.com/in/shaheem-pp/) [Website](https://shaheem.netlify.app/)
+1. Hardee Manishkumar Raval - C0946490
+2. Thrisha Selvaraj - C0941392
+3. Shaheem Puzhuthini Para - C0935469
