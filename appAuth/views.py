@@ -1,8 +1,12 @@
-from django.http import HttpResponse
 from django.shortcuts import render
+
+from appAuth.forms import LoginForm
+
 
 # Create your views here.
 
 
-def home(request):
-    return HttpResponse("<h1>Hello World - auth</h1>")
+def login(request):
+    forms = LoginForm()
+    context = {"title": "Login", "forms": forms}
+    return render(request, "appAuth/login.html", context=context)

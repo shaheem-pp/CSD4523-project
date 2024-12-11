@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "appAuth",
     "appRecipe",
     "appUser",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -110,3 +111,5 @@ AUTH_USER_MODEL = "appAuth.CustomUser"
 # Uncomment and configure if deploying behind a proxy
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # SECURE_SSL_REDIRECT = True
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
