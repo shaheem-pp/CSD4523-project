@@ -68,6 +68,7 @@
 						<div class="card-footer text-end">
 							<div>
 								{% if user.is_authenticated %}
+									{% csrf_token %}
 									{% if recipe.is_liked %}
 										<a
 												href="javascript:void(0);" class="btn btn-sm btn-primary like-btn"
