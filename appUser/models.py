@@ -15,7 +15,7 @@ class Bookmark(models.Model):
         return f"Bookmark: {self.user} -> {self.recipe}"
 
 
-class Likes(models.Model):
+class Like(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     recipe = models.OneToOneField(Recipe, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
