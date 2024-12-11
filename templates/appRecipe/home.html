@@ -52,11 +52,11 @@
 			{% for recipe in recipes %}
 				<div class="col col-md-3 p-2">
 					<div class="card">
-						<a href="#">
+						<a href="{% url 'recipe-view' recipe.slug %}">
 							<div class="image-container">
 								<img src="{{ recipe.image.url }}" class="card-img-top" alt="recipe_image">
 								<div class="overlay">
-									<i class="fas fa-search-plus"></i> <!-- FontAwesome icon -->
+									<i class="fa-solid fa-magnifying-glass-plus"></i>
 								</div>
 							</div>
 						</a>
@@ -128,8 +128,8 @@
                         'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
                     },
                     success: function (response) {
-                        // Toggle the like icon and update the like count
                         likeButton.find('i').toggleClass('fa-solid fa-heart fa-regular fa-heart');
+                        likeButton.toggleClass('btn-primary btn-outline-primary');
                         likeButton.html('<i class="fa' + (response.liked ? ' solid' : ' regular') + ' fa-heart"></i> ' + response.like_count);
                     }
                 });
@@ -149,8 +149,8 @@
                         'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
                     },
                     success: function (response) {
-                        // Toggle the bookmark icon
                         bookmarkButton.find('i').toggleClass('fa-solid fa-bookmark fa-regular fa-bookmark');
+                        bookmarkButton.toggleClass('btn-primary btn-outline-primary');
                     }
                 });
             });
