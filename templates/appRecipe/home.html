@@ -2,12 +2,158 @@
 {% load static %}
 
 {% block style %}
+	<style>
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
 
+        .card-img-top {
+            width: 100%;
+            transition: transform 0.3s ease; /* For scaling effect */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Transparent black overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1; /* Overlay is visible by default */
+            transition: opacity 0.3s ease; /* For fading effect */
+        }
+
+        .overlay i {
+            color: white; /* Icon color */
+            font-size: 2rem; /* Icon size */
+            transition: opacity 0.3s ease;
+        }
+
+        .image-container:hover .card-img-top {
+            transform: scale(1.02); /* Image scales up */
+        }
+
+        .image-container:hover .overlay {
+            opacity: 0; /* Overlay disappears on hover */
+        }
+	</style>
 {% endblock style %}
 
 
-
 {% block content %}
+	<div class="container">
+		<h1 class="display-6 text-center">Find your Favourite Recipe<span class="text-danger"><i
+				class="fa-solid fa-heart"></i></span></h1>
+		<div class="row">
+			{% for recipe in recipes %}
+				<div class="col col-md-3 p-2">
+					<div class="card">
+						<a href="#">
+							<div class="image-container">
+								<img src="{{ recipe.image.url }}" class="card-img-top" alt="recipe_image">
+								<div class="overlay">
+									<i class="fas fa-search-plus"></i> <!-- FontAwesome icon -->
+								</div>
+							</div>
+						</a>
+						<div class="card-body">
+							<h5 class="card-title">{{ recipe.name }}</h5>
+							<p class="card-text three-lines">{{ recipe.about }}</p>
+							<p class="card-text">Author: {{ recipe.author }}</p>
+						</div>
+						<div class="card-footer text-end">
+							<div>
+								{% if user.is_authenticated %}
+									{% if recipe.is_liked %}
+										<a
+												href="javascript:void(0);" class="btn btn-sm btn-primary like-btn"
+												data-recipe-id="{{ recipe.id }}">
+											<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}
+										</a>
+									{% else %}
+										<a
+												href="javascript:void(0);"
+												class="btn btn-sm btn-outline-primary like-btn"
+												data-recipe-id="{{ recipe.id }}">
+											<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}
+										</a>
+									{% endif %}
+									&nbsp;
+									{% if recipe.is_bookmarked %}
+										<a
+												href="javascript:void(0);" class="btn btn-sm btn-primary bookmark-btn"
+												data-recipe-id="{{ recipe.id }}">
+											<i class="fa-solid fa-bookmark"></i>
+										</a>
+									{% else %}
+										<a
+												href="javascript:void(0);"
+												class="btn btn-sm btn-outline-primary bookmark-btn"
+												data-recipe-id="{{ recipe.id }}">
+											<i class="fa-regular fa-bookmark"></i>
+										</a>
+									{% endif %}
+								{% else %}
+									<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}
+								{% endif %}
 
-
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 {% endblock content %}
+
+{% block script %}
+	<script>
+        $(document).ready(function () {
+            // Like button click event
+            $('.like-btn').click(function () {
+                console.log(".like-btn called");
+                var recipeId = $(this).data('recipe-id');
+                var likeButton = $(this);
+
+                $.ajax({
+                    url: '/user/toggle_like/',
+                    type: 'POST',
+                    data: {
+                        'recipe_id': recipeId,
+                        'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                    success: function (response) {
+                        // Toggle the like icon and update the like count
+                        likeButton.find('i').toggleClass('fa-solid fa-heart fa-regular fa-heart');
+                        likeButton.html('<i class="fa' + (response.liked ? ' solid' : ' regular') + ' fa-heart"></i> ' + response.like_count);
+                    }
+                });
+            });
+
+            // Bookmark button click event
+            $('.bookmark-btn').click(function () {
+                console.log(".bookmark-btn called");
+                var recipeId = $(this).data('recipe-id');
+                var bookmarkButton = $(this);
+
+                $.ajax({
+                    url: '/user/toggle_bookmark/',
+                    type: 'POST',
+                    data: {
+                        'recipe_id': recipeId,
+                        'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                    success: function (response) {
+                        // Toggle the bookmark icon
+                        bookmarkButton.find('i').toggleClass('fa-solid fa-bookmark fa-regular fa-bookmark');
+                    }
+                });
+            });
+        });
+
+	</script>
+{% endblock script %}

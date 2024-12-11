@@ -71,7 +71,12 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" style="max-width: 100vw; overflow-x: hidden;">
 						{% if user.is_authenticated %}
-							<li><a class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a></li>
+							<li><a class="dropdown-item" href="/auth/signout/"><i class="fa-solid fa-gear"></i> Settings</a>
+							</li>
+							{% if user.user_type == 1 %}
+								<li><a class="dropdown-item" href="/admin/"><i class="fa-solid fa-user-tie"></i>
+									Admin</a></li>
+							{% endif %}
 							<li>
 								<hr class="dropdown-divider">
 							</li>
@@ -95,6 +100,8 @@
 
 <script src="https://kit.fontawesome.com/33fa90f288.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/custom.js' %}"></script>
+
+{% block script %}{% endblock script %}
 
 <!-- endbuild -->
 

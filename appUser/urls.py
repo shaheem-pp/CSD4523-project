@@ -1,7 +1,8 @@
 from django.urls import path
 
-from appUser.views import home
+from appUser import views
 
 urlpatterns = [
-    path("", home, name="home"),
+    path("/toggle_like/", views.toggle_like, name="toggle_like"),
+    path("/toggle_bookmark/", views.toggle_bookmark, name="toggle_bookmark"),
 ]
