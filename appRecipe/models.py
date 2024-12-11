@@ -26,6 +26,9 @@ class Category(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Recipe(models.Model):
 
@@ -46,3 +49,6 @@ class Recipe(models.Model):
         upload_to=get_file_path, null=True, blank=True, default="recipe/default.jpg"
     )
     is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Recipe: {self.name} by {self.author}"
