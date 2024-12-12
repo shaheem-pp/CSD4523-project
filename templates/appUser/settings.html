@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+	<style>
+
+	</style>
+{% endblock style %}
+
+
+{% block content %}
+
+	<div class="container p-5">
+		<div class="text-center">
+			<a href="/user/settings/" id="my-profile-btn" class="btn btn-dark">My Profile</a>
+			<a href="/user/settings/my-recipes/" id="my-recipes-btn" class="btn btn-light">My Recipes</a>
+			<a href="/user/settings/my-bookmarks/" id="my-bookmarks-btn" class="btn btn-light"> My Bookmarks</a>
+			<a href="/user/settings/my-reviews/" id="my-reviews-btn" class="btn btn-light">My Reviews</a>
+		</div>
+		<div id="content" class="p-5">
+			{% if request.user.user_type != 3 %}
+				<h1 class="display-1">Hello {{ request.user }}</h1>
+				<form action="/user/chef/verification/" method="post">
+					{% csrf_token %}
+					<div class="mb-3">
+						<label for="chefCodeInput" class="form-label">Are you a Chef? Enter the code</label>
+						<div class="row">
+							<div class="col col-md-10">
+								<input
+										type="text" class="form-control" id="chefCodeInput"
+										aria-describedby="chefCodeInput" name="chefCodeInput">
+							</div>
+							<div class="col col-md-2">
+								<button class="btn btn-primary w-100" type="submit">Submit</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<br>
+				<hr>
+				<br>
+			{% else %}
+				<h1 class="display-6">Hello Chef {{ request.user }}!</h1>
+			{% endif %}
+			<form action="/user/update_user_details/" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+
+				<div class="mb-3">
+					<label for="email" class="form-label">Email address</label>
+					<input
+							type="email" class="form-control" id="email" aria-describedby="email" name="email"
+							value="{{ user.email }}" disabled>
+				</div>
+
+				<div class="mb-3">
+					<label for="name" class="form-label">Full Name</label>
+					<input type="text" class="form-control" id="name" name="name" value="{{ user.name }}">
+				</div>
+
+				<div class="mb-3">
+					<label for="existing_password" class="form-label">Existing Password</label>
+					<input
+							type="password" class="form-control" id="existing_password" name="existing_password"
+							placeholder="Enter your existing password">
+				</div>
+
+				<div class="mb-3">
+					<label for="new_password" class="form-label">New Password</label>
+					<input
+							type="password" class="form-control" id="new_password" name="new_password"
+							placeholder="Enter your new password">
+				</div>
+
+				<div class="mb-3">
+					<label for="image" class="form-label">Profile Image</label>
+					<input type="file" class="form-control" id="image" name="image">
+					{% if user.image %}
+						<img src="{{ user.image.url }}" alt="Current Image" width="100" class="mt-2">
+					{% endif %}
+				</div>
+
+				{% if user.user_type == 3 %}
+					<div class="mb-3">
+						<label for="designation" class="form-label">Designation</label>
+						<input
+								type="text" class="form-control" id="designation" name="designation"
+								value="{{ user.designation }}">
+					</div>
+				{% else %}
+					<input type="hidden" name="designation" value="">
+				{% endif %}
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}
+
+

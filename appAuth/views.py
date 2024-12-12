@@ -4,9 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from appAuth.forms import LoginForm, CustomUserForm
+from appRecipe.views import get_common_context
 
 
 def login(request):
+    context = get_common_context()
+
     if request.user.is_authenticated:
         return redirect("home")
 
@@ -27,10 +30,12 @@ def login(request):
     else:
         form = LoginForm()
 
-    context = {
-        "title": "Login",
-        "form": form,
-    }
+    context.update(
+        {
+            "title": "Login",
+            "form": form,
+        }
+    )
     return render(request, "appAuth/login.html", context)
 
 
@@ -55,6 +60,7 @@ def signout(request):
 
 
 def signup(request):
+    context = get_common_context()
     if request.method == "POST":
         form = CustomUserForm(request.POST, request.FILES)
         if form.is_valid():
@@ -81,7 +87,9 @@ def signup(request):
                 messages.error(request, "Invalid email or password.")
         else:
             messages.error(request, "Form is not valid. Please check your input.")
-            return render(request, "appAuth/signup.html", {"form": form})
+            context.update({"title": "Signup", "form": form})
+            return render(request, "appAuth/signup.html", context=context)
     else:
         form = CustomUserForm()
-    return render(request, "appAuth/signup.html", {"form": form})
+        context.update({"title": "Signup", "form": form})
+    return render(request, "appAuth/signup.html", context=context)

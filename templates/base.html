@@ -76,7 +76,8 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" style="max-width: 100vw; overflow-x: hidden;">
 						{% if user.is_authenticated %}
-							<li><a class="dropdown-item" href="/auth/signout/"><i class="fa-solid fa-gear"></i> Settings</a>
+							<li><a class="dropdown-item" href="/user/settings/"><i class="fa-solid fa-gear"></i>
+								Settings</a>
 							</li>
 							{% if user.user_type == 1 %}
 								<li><a class="dropdown-item" href="/admin/"><i class="fa-solid fa-user-tie"></i>

@@ -16,4 +16,8 @@ urlpatterns = [
         views.delete_review,
         name="delete_review",
     ),
+    path("/chef/verification/", views.chef_verify, name="user_chef_verify"),
+    path(
+        "/update_user_details/", views.update_user_details, name="update_user_details"
+    ),
 ]
