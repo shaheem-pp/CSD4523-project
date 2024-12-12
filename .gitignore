@@ -40,5 +40,5 @@ node_modules/
 staticfiles/
 
 # Ignore everything under media, except for the default image
-media/*
-!media/user/default.jpg
+#media/*
+#!media/user/default.jpg
