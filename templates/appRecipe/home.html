@@ -77,35 +77,35 @@
 									{% csrf_token %}
 									{% if recipe.is_liked %}
 										<a
-												href="javascript:void(0);" class="btn btn-sm btn-primary like-btn"
+												href="javascript:void(0);" class="btn btn-sm btn-light like-btn"
 												data-recipe-id="{{ recipe.id }}">
-											<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}
+											<i class="fa-solid fa-heart text-danger"></i> {{ recipe.like_count }}
 										</a>
 									{% else %}
 										<a
 												href="javascript:void(0);"
-												class="btn btn-sm btn-outline-primary like-btn"
+												class="btn btn-sm btn-light like-btn"
 												data-recipe-id="{{ recipe.id }}">
 											<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}
 										</a>
 									{% endif %}
-									&nbsp;
+
 									{% if recipe.is_bookmarked %}
 										<a
-												href="javascript:void(0);" class="btn btn-sm btn-primary bookmark-btn"
+												href="javascript:void(0);" class="btn btn-sm btn-light bookmark-btn"
 												data-recipe-id="{{ recipe.id }}">
 											<i class="fa-solid fa-bookmark"></i>
 										</a>
 									{% else %}
 										<a
 												href="javascript:void(0);"
-												class="btn btn-sm btn-outline-primary bookmark-btn"
+												class="btn btn-sm btn-light bookmark-btn"
 												data-recipe-id="{{ recipe.id }}">
 											<i class="fa-regular fa-bookmark"></i>
 										</a>
 									{% endif %}
 								{% else %}
-									<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}
+									<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}
 								{% endif %}
 							</div>
 						</div>
@@ -119,6 +119,9 @@
 {% block script %}
 	<script>
         $(document).ready(function () {
+
+            $(".alert").hide()
+
             // Like button click event
             $('.like-btn').click(function () {
                 console.log(".like-btn called");
@@ -133,11 +136,9 @@
                         'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
                     },
                     success: function (response) {
-                        likeButton.find('i').toggleClass('fa-solid fa-heart fa-regular fa-heart');
-                        likeButton.toggleClass('btn-primary btn-outline-primary');
-                        likeButton.html('<i class="fa' + (response.liked ? ' solid' : ' regular') + ' fa-heart"></i> ' + response.like_count);
+                        likeButton.find('i').toggleClass('fa-solid fa-heart text-danger fa-regular fa-heart text-dark');
                         if (response.liked) {
-                            {#likeButton.html(`<i class="fa-solid fa-heart text-danger"></i> ${response.like_count}`)#}
+                            likeButton.html(`<i class="fa-solid fa-heart text-danger"></i> ${response.like_count}`)
                             $(".alert").text("Recipe Liked")
                             $(".alert").fadeIn(500);
                             setTimeout(function () {
@@ -145,7 +146,7 @@
                             }, 1000)
 
                         } else {
-                            {#likeButton.html(`<i class="fa-regular fa-heart"></i> ${response.like_count}`)#}
+                            likeButton.html(`<i class="fa-regular fa-heart"></i> ${response.like_count}`)
                             $(".alert").text("Recipe Unliked")
                             $(".alert").fadeIn(500);
                             setTimeout(function () {
@@ -171,7 +172,6 @@
                     },
                     success: function (response) {
                         bookmarkButton.find('i').toggleClass('fa-solid fa-bookmark fa-regular fa-bookmark');
-                        bookmarkButton.toggleClass('btn-primary btn-outline-primary');
                         if (response.bookmarked) {
                             $(".alert").text("Recipe Bookmarked")
                             $(".alert").fadeIn(500);
