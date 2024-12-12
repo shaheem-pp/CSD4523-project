@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Case, When, Value, IntegerField
@@ -5,7 +7,7 @@ from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 
-from appRecipe.forms import RecipeCreateForm, RecipeUpdateForm
+from appRecipe.forms import RecipeCreateForm
 from appRecipe.models import Category, Recipe
 from appUser.models import Like, Bookmark, Review
 
@@ -21,12 +23,12 @@ def home(request):
     context = get_common_context()
     recipes = Recipe.objects.filter(is_deleted=False).annotate(like_count=Count("like"))
     if request.user.is_authenticated:
-        liked_recipes = Like.objects.filter(user=request.user).values_list(
-            "recipe", flat=True
-        )
-        bookmarked_recipes = Bookmark.objects.filter(user=request.user).values_list(
-            "recipe", flat=True
-        )
+        liked_recipes = Like.objects.filter(
+            user=request.user, recipe__is_deleted=False, user__is_deleted=False
+        ).values_list("recipe", flat=True)
+        bookmarked_recipes = Bookmark.objects.filter(
+            user=request.user, recipe__is_deleted=False, user__is_deleted=False
+        ).values_list("recipe", flat=True)
         for recipe in recipes:
             recipe.is_liked = recipe.id in liked_recipes
             recipe.is_bookmarked = recipe.id in bookmarked_recipes
@@ -46,11 +48,23 @@ def home(request):
 
 def recipe_view(request, slug):
     context = get_common_context()
-    recipe = get_object_or_404(Recipe.objects.filter(slug=slug, is_deleted=False))
+    recipe = get_object_or_404(
+        Recipe.objects.filter(slug=slug, author__is_deleted=False, is_deleted=False)
+    )
 
-    like_count = Like.objects.filter(recipe=recipe, is_deleted=False).count()
+    like_count = Like.objects.filter(
+        recipe=recipe,
+        recipe__is_deleted=False,
+        user__is_deleted=False,
+        is_deleted=False,
+    ).count()
     reviews = (
-        Review.objects.filter(recipe=recipe, is_deleted=False)
+        Review.objects.filter(
+            recipe=recipe,
+            recipe__is_deleted=False,
+            user__is_deleted=False,
+            is_deleted=False,
+        )
         .annotate(
             is_chef=Case(
                 When(user__user_type=3, then=Value(1)),  # Chef gets priority
@@ -99,9 +113,9 @@ def category_view(request, slug):
 
     category = get_object_or_404(Category, slug=slug, is_deleted=False)
 
-    recipes = Recipe.objects.filter(category=category, is_deleted=False).annotate(
-        like_count=Count("like")
-    )
+    recipes = Recipe.objects.filter(
+        category=category, author__is_deleted=False, is_deleted=False
+    ).annotate(like_count=Count("like"))
     if request.user.is_authenticated:
         liked_recipes = Like.objects.filter(user=request.user).values_list(
             "recipe", flat=True
@@ -155,13 +169,58 @@ def create_recipe(request):
 
 @login_required
 def update_recipe(request, slug):
-    recipe = get_object_or_404(Recipe, slug=slug, author=request.user)
+    recipe = get_object_or_404(
+        Recipe, slug=slug, author=request.user, author__is_deleted=False
+    )
     context = get_common_context()
 
     if request.method == "POST":
-        pass
-    else:
-        form = RecipeUpdateForm(instance=recipe)
+        fields_updated = []
+
+        name = request.POST.get("name")
+        category_id = request.POST.get("category")
+        about = request.POST.get("about")
+        ingredients = request.POST.get("ingredients")
+        preparation = request.POST.get("preparation")
+
+        if name and name != recipe.name:
+            recipe.name = name
+            base_slug = slugify(recipe.name)
+            unique_slug = base_slug
+            counter = 1
+            while Recipe.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            recipe.slug = unique_slug
+            fields_updated.append("Name and Slug")
+
+        if category_id and category_id != str(recipe.category_id):
+            recipe.category_id = category_id
+            fields_updated.append("Category")
+
+        if about and about != recipe.about:
+            recipe.about = about
+            fields_updated.append("About")
+
+        if ingredients and ingredients != recipe.ingredients:
+            recipe.ingredients = ingredients
+            fields_updated.append("Ingredients")
+
+        if preparation and preparation != recipe.preparation:
+            recipe.preparation = preparation
+            fields_updated.append("Preparation")
+
+        if fields_updated:
+            recipe.save()
+            messages.success(
+                request,
+                f"Recipe updated successfully! Updated fields: {', '.join(fields_updated)}",
+            )
+            return redirect("user_settings")
+        else:
+            messages.info(request, "No changes were made to the recipe.")
+
+        return redirect("user_settings")
 
     context.update({"title": "Update Recipe | Recime", "recipe": recipe})
     return render(request, "appRecipe/update_recipe.html", context)
@@ -172,7 +231,13 @@ def remove_recipe(request, slug):
     recipe = get_object_or_404(Recipe, slug=slug, author=request.user)
 
     if request.method == "POST":
-        recipe.is_deleted = True  # Mark as deleted
+        recipe.is_deleted = True
+        unique_slug = f"{recipe.slug}_{datetime.now()}_deleted"
+        counter = 1
+        while Recipe.objects.filter(slug=unique_slug).exists():
+            unique_slug = f"{recipe.slug}_{datetime.now()}_{counter}_deleted"
+            counter += 1
+        recipe.slug = unique_slug
         recipe.save()
         messages.success(request, "Recipe has been removed!")
         return redirect("settings_my_recipes")

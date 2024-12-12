@@ -33,22 +33,21 @@
 									<p class="card-text three-lines">{{ recipe.about }}</p>
 
 
-									{#									<form#}
-									{#											id="user_update_recipe_form" action="/user/update_recipe/{{ recipe.slug }}/"#}
-									{#											method="post">#}
-									{#										{% csrf_token %}#}
-									{#									</form>#}
-									{#									<form#}
-									{#											id="user_remove_recipe_form" action="/user/remove_recipe/{{ recipe.slug }}/"#}
-									{#											method="post">#}
-									{#										{% csrf_token %}#}
-									{#									</form>#}
-									{#									<button type="submit" class="btn btn-sm btn-primary" form="user_update_recipe_form">#}
-									{#										<i class="fa-solid fa-pen"></i> Update#}
-									{#									</button>#}
-									{#									<button type="submit" class="btn btn-sm btn-danger" form="user_remove_recipe_form">#}
-									{#										<i class="fa-solid fa-trash"></i> Delete#}
-									{#									</button>#}
+									<form
+											id="user_update_recipe_form" action="/user/update_recipe/{{ recipe.slug }}/"
+											method="get">
+									</form>
+									<form
+											id="user_remove_recipe_form" action="/user/remove_recipe/{{ recipe.slug }}/"
+											method="post">
+										{% csrf_token %}
+									</form>
+									<button type="submit" class="btn btn-sm btn-primary" form="user_update_recipe_form">
+										<i class="fa-solid fa-pen"></i> Update
+									</button>
+									<button type="submit" class="btn btn-sm btn-danger" form="user_remove_recipe_form">
+										<i class="fa-solid fa-trash"></i> Delete
+									</button>
 								</div>
 							</div>
 						</div>

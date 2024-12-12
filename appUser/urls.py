@@ -35,4 +35,9 @@ urlpatterns = [
         appRecipeViews.update_recipe,
         name="update-recipe",
     ),
+    path(
+        "/remove_recipe/<str:slug>/",
+        appRecipeViews.remove_recipe,
+        name="remove-recipe",
+    ),
 ]

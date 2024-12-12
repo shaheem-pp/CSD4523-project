@@ -9,105 +9,106 @@
 	</style>
 {% endblock style %}
 
-
 {% block content %}
-
-	<div
-			class="alert alert-info" role="alert"
-			style="position: fixed; top: 5%; right: 5%; transform: translate(-5%, -5%); z-index: 10"></div>
 	<div class="container p-5">
-
-		<form
-				id="user_update_recipe_form" action="{% url 'update-recipe' recipe.slug %}" method="post"
-				enctype="multipart/form-data">
-			{% csrf_token %}
-			<h2>Update Recipe: {{ recipe.name }}</h2>
-
-			<div>
-				<label for="id_name">Name:</label>
-				{{ form.name }}  <!-- Renders the Name field with error messages if any -->
-				{% if form.name.errors %}
-					<div class="errors">
-						{% for error in form.name.errors %}
-							<p>{{ error }}</p>
-						{% endfor %}
-					</div>
-				{% endif %}
+		<div class="card">
+			<div class="card-header">
+				<h2 class="card-title">Update Recipe</h2>
 			</div>
-
-			<div>
-				<label for="id_category">Category:</label>
-				{{ form.category }}  <!-- Renders the Category field with error messages if any -->
-				{% if form.category.errors %}
-					<div class="errors">
-						{% for error in form.category.errors %}
-							<p>{{ error }}</p>
-						{% endfor %}
+			<div class="card-body">
+				<form
+						id="user_update_recipe_form"
+						action="{% url 'update-recipe' recipe.slug %}"
+						method="post"
+						enctype="multipart/form-data"
+				>
+					{% csrf_token %}
+					<!-- Recipe Name -->
+					<div class="mb-3">
+						<label for="name" class="form-label">Recipe Name</label>
+						<input
+								type="text"
+								name="name"
+								id="name"
+								class="form-control"
+								value="{{ recipe.name }}"
+								required
+						/>
 					</div>
-				{% endif %}
-			</div>
 
-			<div>
-				<label for="id_image">Image:</label>
-				<p>Currently: {{ recipe.image.name }}</p>  <!-- Displays the current image -->
-				{{ form.image }}  <!-- Renders the Image field -->
-				{% if form.image.errors %}
-					<div class="errors">
-						{% for error in form.image.errors %}
-							<p>{{ error }}</p>
-						{% endfor %}
+					<!-- Category -->
+					<div class="mb-3">
+						<label for="category" class="form-label">Category</label>
+						<select
+								name="category"
+								id="category"
+								class="form-select"
+								required
+						>
+							{% for category in categories %}
+								<option
+										value="{{ category.id }}"
+										{% if recipe.category.id == category.id %}selected{% endif %}>
+									{{ category.name }}
+								</option>
+							{% endfor %}
+						</select>
 					</div>
-				{% endif %}
-			</div>
 
-			<div>
-				<label for="id_about">About:</label>
-				{{ form.about }}
-				{% if form.about.errors %}
-					<div class="errors">
-						{% for error in form.about.errors %}
-							<p>{{ error }}</p>
-						{% endfor %}
+					<!-- About -->
+					<div class="mb-3">
+						<label for="about" class="form-label">About</label>
+						<textarea
+								name="about"
+								id="about"
+								class="form-control"
+								rows="4"
+								required
+						>{{ recipe.about }}</textarea>
 					</div>
-				{% endif %}
-			</div>
 
-			<div>
-				<label for="id_ingredients">Ingredients:</label>
-				{{ form.ingredients }}  <!-- Renders the Ingredients field -->
-				{% if form.ingredients.errors %}
-					<div class="errors">
-						{% for error in form.ingredients.errors %}
-							<p>{{ error }}</p>
-						{% endfor %}
+					<!-- Ingredients -->
+					<div class="mb-3">
+						<label for="ingredients" class="form-label">Ingredients</label>
+						<textarea
+								name="ingredients"
+								id="ingredients"
+								class="form-control ckeditor"
+								rows="6"
+								required
+						>{{ recipe.ingredients }}</textarea>
 					</div>
-				{% endif %}
-			</div>
 
-			<div>
-				<label for="id_preparation">Preparation:</label>
-				{{ form.preparation }}  <!-- Renders the Preparation field -->
-				{% if form.preparation.errors %}
-					<div class="errors">
-						{% for error in form.preparation.errors %}
-							<p>{{ error }}</p>
-						{% endfor %}
+					<!-- Preparation -->
+					<div class="mb-3">
+						<label for="preparation" class="form-label">Preparation</label>
+						<textarea
+								name="preparation"
+								id="preparation"
+								class="form-control ckeditor"
+								rows="6"
+								required
+						>{{ recipe.preparation }}</textarea>
 					</div>
-				{% endif %}
+				</form>
 			</div>
-
-			<button type="submit">Update Recipe</button>
-		</form>
-
-
+			<div class="card-footer">
+				<button type="submit" class="btn btn-primary w-100" form="user_update_recipe_form">
+					Submit
+				</button>
+			</div>
+		</div>
 	</div>
 {% endblock content %}
 
 {% block script %}
+	<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 	<script>
         $(document).ready(function () {
-
-            $(".alert").hide()
+            // Initialize CKEditor for the textarea fields
+            $('.ckeditor').each(function () {
+                CKEDITOR.replace(this.id);
+            });
         });
 	</script>
 {% endblock script %}
