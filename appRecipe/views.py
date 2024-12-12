@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Case, When, Value, IntegerField
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 
 from appRecipe.forms import RecipeCreateForm
 from appRecipe.models import Category, Recipe
-from appUser.models import Like, Bookmark
+from appUser.models import Like, Bookmark, Review
 
 
 def get_common_context():
@@ -45,22 +46,48 @@ def home(request):
 
 def recipe_view(request, slug):
     context = get_common_context()
-    recipe = get_object_or_404(Recipe, slug=slug, is_deleted=False)
+    recipe = get_object_or_404(Recipe.objects.filter(slug=slug, is_deleted=False))
+
     like_count = Like.objects.filter(recipe=recipe, is_deleted=False).count()
-    context.update(
-        {"title": f"{recipe.name} | Recime", "recipe": recipe, "like_count": like_count}
+    reviews = (
+        Review.objects.filter(recipe=recipe, is_deleted=False)
+        .annotate(
+            is_chef=Case(
+                When(user__user_type=3, then=Value(1)),  # Chef gets priority
+                default=Value(0),  # Non-chefs
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("-is_chef", "-created_on")  # Sort by chef first, then by most recent
+        .select_related("user")
     )
+
+    context.update(
+        {
+            "title": f"{recipe.name} | Recime",
+            "recipe": recipe,
+            "like_count": like_count,
+            "reviews": reviews,
+        }
+    )
+
     if request.user.is_authenticated:
-        liked_recipes = Like.objects.filter(
+        user_likes = Like.objects.filter(
             user=request.user, recipe=recipe, is_deleted=False
         )
-        bookmarked_recipes = Bookmark.objects.filter(
+        user_bookmarks = Bookmark.objects.filter(
             user=request.user, recipe=recipe, is_deleted=False
         )
+        user_reviews = Review.objects.filter(
+            user=request.user, recipe=recipe, is_deleted=False
+        )
+
         context.update(
             {
-                "is_liked": liked_recipes.exists(),
-                "is_bookmarked": bookmarked_recipes.exists(),
+                "is_liked": user_likes.exists(),
+                "is_bookmarked": user_bookmarks.exists(),
+                "has_review": user_reviews.exists(),
+                "user_review": user_reviews.first(),
             }
         )
 

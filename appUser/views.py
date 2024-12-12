@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 from appRecipe.models import Recipe
 from appRecipe.views import get_common_context
-from appUser.models import Like, Bookmark
+from appUser.models import Like, Bookmark, Review
 
 
 @login_required
@@ -45,3 +45,41 @@ def settings(request):
     user = request.user
     context.update({"user": user, "title": f"{user.username} | Settings"})
     return render(request, "appUser/settings.html", context=context)
+
+
+@login_required
+def add_review(request, recipe_slug):
+    if request.method == "POST":
+
+        recipe = get_object_or_404(Recipe, slug=recipe_slug, is_deleted=False)
+
+        review_content = request.POST.get("review")
+        if not review_content:
+            return redirect("recipe-view", slug=recipe_slug)
+
+        review = Review.objects.filter(user=request.user, recipe=recipe).first()
+
+        if review:
+            review.review = review_content
+            review.save()
+        else:
+            Review.objects.create(
+                user=request.user, recipe=recipe, review=review_content
+            )
+
+        return redirect("recipe-view", slug=recipe_slug)
+
+    return redirect("recipe-view", slug=recipe_slug)
+
+
+@login_required
+def delete_review(request, recipe_slug):
+    if request.method == "POST":
+        recipe = get_object_or_404(Recipe, slug=recipe_slug, is_deleted=False)
+        review = Review.objects.filter(user=request.user, recipe=recipe).first()
+
+        if review:
+            review.delete()
+
+        return redirect("recipe-view", slug=recipe_slug)
+    return redirect("recipe-view", slug=recipe_slug)

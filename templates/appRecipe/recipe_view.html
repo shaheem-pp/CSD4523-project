@@ -57,18 +57,81 @@
 				{% endif %}
 			</div>
 		</div>
-		<h3>About</h3>
-		<p>{{ recipe.about | safe }}</p>
-		<h3>Ingredients</h3>
-		<p>{{ recipe.ingredients | safe }}</p>
-		<h3>Preparation</h3>
-		<p>{{ recipe.preparation | safe }}</p>
+		<div class="row">
+			<div class="col col-md-8">
+				<h3>About</h3>
+				<p style="text-align: justify">{{ recipe.about | safe }}</p>
+				<h3>Ingredients</h3>
+				<p style="text-align: justify">{{ recipe.ingredients | safe }}</p>
+				<h3>Preparation</h3>
+				<p style="text-align: justify">{{ recipe.preparation | safe }}</p>
+			</div>
+			<div class="col col-md-4" style="border-left: 1px solid #c0c0c0">
+				{% if has_review %}
+					<div class="user-review">
+						<h5>Your Review</h5>
+						<p>{{ user_review.review }}</p>
+						<form
+								id="add_review_form"
+								action="/user/recipe/{{ recipe.slug }}/add_review/" method="POST"
+								class="d-none edit-review-form">
+							{% csrf_token %}
+							<textarea name="review" class="form-control">{{ user_review.review }}</textarea>
+						</form>
+						<form
+								id="delete_review_form"
+								action="/user/recipe/{{ recipe.slug }}/delete_review/" method="POST"
+								class="delete-review-form mt-2">
+							{% csrf_token %}
+						</form>
+						<button class="btn btn-sm btn-primary edit-review-btn">Edit</button>
+						<button
+								type="submit" class="btn btn-sm btn-success d-none" id="add_review_form_btn"
+								form="add_review_form">Update
+						</button>
+						<button type="submit" class="btn btn-sm btn-danger" form="delete_review_form">Delete</button>
+					</div>
+				{% else %}
+					<form action="/user/recipe/{{ recipe.slug }}/add_review/" method="POST">
+						{% csrf_token %}
+						<textarea
+								name="review" class="form-control" placeholder="Write your review here..."
+								required></textarea>
+						<button type="submit" class="btn btn-sm btn-primary mt-2">Submit</button>
+					</form>
+				{% endif %}
+				<div class="reviews-section mt-4">
+					<h4>Reviews</h4>
+					{% for review in reviews %}
+						<div class="review-card card mb-3">
+							<div class="card-body">
+								<h5 class="card-title">{{ review.user.name }}</h5>
+								{% if review.user.user_type == 3 %}
+									<span class="badge bg-info">Chef</span>
+									<p>{{ review.user.designation }}</p>
+								{% endif %}
+								<p class="card-text">{{ review.review }}</p>
+								<p class="text-muted small mb-0">Reviewed on {{ review.created_on|date:"M d, Y" }}</p>
+							</div>
+						</div>
+					{% empty %}
+						<p>No reviews yet. Be the first to review!</p>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock content %}
 
 {% block script %}
 	<script>
         $(document).ready(function () {
+
+            $(".edit-review-btn").click(function () {
+                $(this).siblings(".edit-review-form").removeClass("d-none");
+                $("#add_review_form_btn").removeClass("d-none");
+                $(this).hide();
+            });
 
             $(".alert").hide();
 
