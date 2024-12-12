@@ -1,6 +1,7 @@
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 
+from appRecipe.forms import RecipeCreateForm
 from appRecipe.models import Category, Recipe
 from appUser.models import Like, Bookmark
 
@@ -94,3 +95,12 @@ def category_view(request, slug):
         }
     )
     return render(request, "appRecipe/category_view.html", context=context)
+
+
+def create_recipe(request):
+    context = get_common_context()
+    if request.POST:
+        pass
+    else:
+        context.update({"title": f"Create Recipe | Recime", "form": RecipeCreateForm()})
+    return render(request, "appRecipe/create_recipe.html", context=context)

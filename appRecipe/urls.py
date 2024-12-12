@@ -10,4 +10,5 @@ urlpatterns = [
         views.category_view,
         name="recipe-category-view",
     ),
+    path("recipe/create/", views.create_recipe, name="create-recipe"),
 ]

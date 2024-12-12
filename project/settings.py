@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "appRecipe",
     "appUser",
     "crispy_forms",
+    "ckeditor",
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,30 @@ MESSAGE_TAGS = {
     messages.SUCCESS: "alert-success",
     messages.ERROR: "alert-danger",
 }
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            ["Paragraph Format", "Block Quote"],
+            [
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source", "Preview"],
+        ],
+        "width": "100%",
+        "height": "25rem",
+    },
+}
+CKEDITOR_UPLOAD_PATH = "uploads/"

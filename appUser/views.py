@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import render
 
 from appRecipe.models import Recipe
+from appRecipe.views import get_common_context
 from appUser.models import Like, Bookmark
 
 
@@ -35,3 +37,11 @@ def toggle_bookmark(request):
         bookmarked = True
 
     return JsonResponse({"bookmarked": bookmarked})
+
+
+@login_required
+def settings(request):
+    context = get_common_context()
+    user = request.user
+    context.update({"user": user, "title": f"{user.username} | Settings"})
+    return render(request, "appUser/settings.html", context=context)
