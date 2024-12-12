@@ -65,6 +65,7 @@ def recipe_view(request, slug):
 
 def category_view(request, slug):
     context = get_common_context()
+
     category = get_object_or_404(Category, slug=slug, is_deleted=False)
 
     recipes = Recipe.objects.filter(category=category, is_deleted=False).annotate(
@@ -89,6 +90,7 @@ def category_view(request, slug):
         {
             "title": f"{category.name} | Recime",
             "recipes": recipes,
+            "category": category,
         }
     )
-    return render(request, "appRecipe/recipe_view.html", context=context)
+    return render(request, "appRecipe/category_view.html", context=context)
