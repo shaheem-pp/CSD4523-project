@@ -12,10 +12,10 @@
 
 	<div class="container p-5">
 		<div class="text-center">
+			<h1 class="display-3">Settings</h1>
 			<a href="/user/settings/" id="my-profile-btn" class="btn btn-dark">My Profile</a>
 			<a href="/user/settings/my-recipes/" id="my-recipes-btn" class="btn btn-light">My Recipes</a>
 			<a href="/user/settings/my-bookmarks/" id="my-bookmarks-btn" class="btn btn-light"> My Bookmarks</a>
-			<a href="/user/settings/my-reviews/" id="my-reviews-btn" class="btn btn-light">My Reviews</a>
 		</div>
 		<div id="content" class="p-5">
 			{% if request.user.user_type != 3 %}

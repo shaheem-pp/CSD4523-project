@@ -5,7 +5,7 @@ from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 
-from appRecipe.forms import RecipeCreateForm
+from appRecipe.forms import RecipeCreateForm, RecipeUpdateForm
 from appRecipe.models import Category, Recipe
 from appUser.models import Like, Bookmark, Review
 
@@ -151,3 +151,34 @@ def create_recipe(request):
         form = RecipeCreateForm()
     context.update({"title": "Create Recipe | Recime", "form": form})
     return render(request, "appRecipe/create_recipe.html", context)
+
+
+@login_required
+def update_recipe(request, slug):
+    recipe = get_object_or_404(Recipe, slug=slug, author=request.user)
+    context = get_common_context()
+
+    if request.method == "POST":
+
+    else:
+        form = RecipeUpdateForm(instance=recipe)
+
+    context.update({"title": "Update Recipe | Recime", "recipe": recipe})
+    return render(request, "appRecipe/update_recipe.html", context)
+
+
+@login_required
+def remove_recipe(request, slug):
+    recipe = get_object_or_404(Recipe, slug=slug, author=request.user)
+
+    if request.method == "POST":
+        recipe.is_deleted = True  # Mark as deleted
+        recipe.save()
+        messages.success(request, "Recipe has been removed!")
+        return redirect(
+            "settings_my_recipes"
+        )
+
+    return redirect(
+        "settings_my_recipes"
+    )

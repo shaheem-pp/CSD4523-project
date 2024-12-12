@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -91,73 +89,6 @@ def delete_review(request, recipe_slug):
 
 
 @login_required
-def my_recipes(request):
-    recipes = Recipe.objects.filter(author=request.user, is_deleted=False)
-    response_data = [
-        {
-            "name": recipe.name,
-            "about": recipe.about,
-            "image": recipe.image.url,
-        }
-        for recipe in recipes
-    ]
-    response = {
-        "type": "recipes",
-        "items": response_data,
-    }
-    return JsonResponse(response, safe=False)
-
-
-@login_required
-def my_bookmarks(request):
-    bookmarks = Bookmark.objects.filter(user=request.user, is_deleted=False)
-    response_data = [
-        {
-            "recipe_name": bookmark.recipe.name,
-            "recipe_slug": bookmark.recipe.slug,
-            "recipe_image": bookmark.recipe.image.url,
-        }
-        for bookmark in bookmarks
-    ]
-    response = {
-        "type": "bookmarks",
-        "items": response_data,
-    }
-    return JsonResponse(response, safe=False)
-
-
-@login_required
-def my_likes(request):
-    likes = Like.objects.filter(user=request.user, is_deleted=False).values(
-        "recipe__id", "recipe__name", "recipe__about", "recipe__image"
-    )
-    response = {
-        "type": "likes",
-        "items": list(likes),
-    }
-    return JsonResponse(response, safe=False)
-
-
-@login_required
-def my_reviews(request):
-    reviews = Review.objects.filter(user=request.user, is_deleted=False)
-    response_data = [
-        {
-            "recipe_name": review.recipe.name,
-            "recipe_slug": review.recipe.slug,
-            "review": review.review,
-            "last_updated_on": datetime.strftime(review.updated_on, "%b %d, %Y"),
-        }
-        for review in reviews
-    ]
-    response = {
-        "type": "reviews",
-        "items": response_data,
-    }
-    return JsonResponse(response, safe=False)
-
-
-@login_required
 def chef_verify(request):
     VALID_CHEF_CODES = ["CHEF2024", "2G3COMPETITION", "TAJCH3"]
     if request.method == "POST":
@@ -243,3 +174,42 @@ def update_user_details(request):
         return redirect("user_settings")
 
     return redirect("user_settings")
+
+
+@login_required
+def settings_my_recipes(request):
+    user = request.user
+    context = get_common_context()
+    recipes = Recipe.objects.filter(author=user, is_deleted=False)
+    context.update({"title": f"{user} | My Recipes", "recipes": recipes})
+    return render(request, "appUser/my_recipes.html", context=context)
+
+
+@login_required
+def settings_my_bookmarks(request):
+    user = request.user
+    context = get_common_context()
+    bookmarks = Bookmark.objects.filter(user=user, is_deleted=False)
+    context.update({"title": f"{user} | My Bookmarks", "bookmarks": bookmarks})
+    return render(request, "appUser/my_bookmarks.html", context=context)
+
+
+@login_required
+def settings_my_reviews(request):
+    user = request.user
+    context = get_common_context()
+    reviews = Review.objects.filter(user=user, is_deleted=False)
+    context.update({"title": f"{user} | My reviews", "reviews": reviews})
+    return render(request, "appUser/my_reviews.html", context=context)
+
+
+@login_required
+def remove_bookmark(request, id):
+    if request.method == "POST":
+        bookmark = Bookmark.objects.get(id=id)
+        bookmark.delete()
+        messages.success(request, "Bookmark removed successfully!")
+        return redirect("settings_my_bookmarks")
+    else:
+        messages.error(request, "You are not allowed to remove this bookmark!")
+        return redirect("settings_my_bookmarks")
