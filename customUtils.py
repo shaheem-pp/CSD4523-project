@@ -10,20 +10,13 @@ class BootstrapFormMixin:
                 f"{existing_classes} form-control mb-3".strip()
             )
 
-            # Add placeholders based on input type
-            if field.widget.input_type == "password":
+            # Add placeholders based on input type if the widget has `input_type`
+            input_type = getattr(field.widget, "input_type", None)
+            if input_type == "password":
                 field.widget.attrs["placeholder"] = "Enter your password"
-            elif field.widget.input_type == "email":
+            elif input_type == "email":
                 field.widget.attrs["placeholder"] = "Enter your email"
-            elif field.widget.input_type == "text":
-                field.widget.attrs["placeholder"] = f"Enter {field.label}"
-            elif field.widget.input_type == "number":
-                field.widget.attrs["placeholder"] = f"Enter {field.label}"
-            elif field.widget.input_type == "date":
-                field.widget.attrs["placeholder"] = f"Select {field.label}"
-            elif field.widget.input_type == "tel":
-                field.widget.attrs["placeholder"] = f"Enter {field.label}"
-            else:
+            elif input_type in ["text", "number", "date", "tel"]:
                 field.widget.attrs["placeholder"] = f"Enter {field.label}"
 
             # For select fields (dropdowns)

@@ -3,42 +3,8 @@
 
 {% block style %}
 	<style>
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .card-img-top {
+        .django-ckeditor-widget {
             width: 100%;
-            transition: transform 0.3s ease; /* For scaling effect */
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Transparent black overlay */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 1; /* Overlay is visible by default */
-            transition: opacity 0.3s ease; /* For fading effect */
-        }
-
-        .overlay i {
-            color: white; /* Icon color */
-            font-size: 2rem; /* Icon size */
-            transition: opacity 0.3s ease;
-        }
-
-        .image-container:hover .card-img-top {
-            transform: scale(1.02); /* Image scales up */
-        }
-
-        .image-container:hover .overlay {
-            opacity: 0; /* Overlay disappears on hover */
         }
 	</style>
 {% endblock style %}
@@ -49,13 +15,34 @@
 	<div
 			class="alert alert-info" role="alert"
 			style="position: fixed; top: 5%; right: 5%; transform: translate(-5%, -5%); z-index: 10"></div>
-	<div class="container">
+	<div class="container p-5">
 
-		{{ form }}
+		<form method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% for field in form %}
+				<div class="mb-4">
+					<label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+					<br>
+					{{ field }}
+					{% if field.errors %}
+						<div class="text-danger">
+							{{ field.errors }}
+						</div>
+					{% endif %}
+				</div>
+			{% endfor %}
+			<button type="submit" class="btn btn-primary">Save</button>
+		</form>
+
 
 	</div>
 {% endblock content %}
 
 {% block script %}
+	<script>
+        $(document).ready(function () {
 
+            $(".alert").hide()
+        });
+	</script>
 {% endblock script %}

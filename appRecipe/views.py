@@ -1,5 +1,8 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.text import slugify
 
 from appRecipe.forms import RecipeCreateForm
 from appRecipe.models import Category, Recipe
@@ -97,10 +100,27 @@ def category_view(request, slug):
     return render(request, "appRecipe/category_view.html", context=context)
 
 
+@login_required
 def create_recipe(request):
     context = get_common_context()
-    if request.POST:
-        pass
+    if request.method == "POST":
+        form = RecipeCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            base_slug = slugify(recipe.name)
+            unique_slug = base_slug
+            counter = 1
+            while Recipe.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            recipe.slug = unique_slug
+            recipe.save()
+            messages.success(request, "Recipe has been created!")
+            return redirect("recipe-view", slug=recipe.slug)
+        else:
+            messages.error(request, form.errors)
     else:
-        context.update({"title": f"Create Recipe | Recime", "form": RecipeCreateForm()})
-    return render(request, "appRecipe/create_recipe.html", context=context)
+        form = RecipeCreateForm()
+    context.update({"title": "Create Recipe | Recime", "form": form})
+    return render(request, "appRecipe/create_recipe.html", context)
