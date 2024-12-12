@@ -17,34 +17,24 @@
 			</div>
 			<div class="card-body">
 				<form
-						id="user_update_recipe_form"
-						action="{% url 'update-recipe' recipe.slug %}"
-						method="post"
-						enctype="multipart/form-data"
-				>
+						id="user_update_recipe_form" action="{% url 'update-recipe' recipe.slug %}" method="post"
+						enctype="multipart/form-data">
 					{% csrf_token %}
 					<!-- Recipe Name -->
-					<div class="mb-3">
+					<div class="form-group">
 						<label for="name" class="form-label">Recipe Name</label>
 						<input
-								type="text"
-								name="name"
-								id="name"
-								class="form-control"
-								value="{{ recipe.name }}"
-								required
-						/>
+								type="text" name="name" id="name" class="form-control" value="{{ recipe.name }}"
+								required/>
 					</div>
-
+					<div class="form-group">
+						<label for="image" class="form-label">Default file input example</label>
+						<input class="form-control" type="file" id="image" value="{{ recipe.image }}" name="image">
+					</div>
 					<!-- Category -->
-					<div class="mb-3">
+					<div class="form-group">
 						<label for="category" class="form-label">Category</label>
-						<select
-								name="category"
-								id="category"
-								class="form-select"
-								required
-						>
+						<select name="category" id="category" class="form-select" required>
 							{% for category in categories %}
 								<option
 										value="{{ category.id }}"
@@ -54,48 +44,31 @@
 							{% endfor %}
 						</select>
 					</div>
-
 					<!-- About -->
-					<div class="mb-3">
+					<div class="form-group">
 						<label for="about" class="form-label">About</label>
 						<textarea
-								name="about"
-								id="about"
-								class="form-control"
-								rows="4"
-								required
-						>{{ recipe.about }}</textarea>
+								name="about" id="about" class="form-control" rows="4"
+								required>{{ recipe.about }}</textarea>
 					</div>
-
 					<!-- Ingredients -->
-					<div class="mb-3">
+					<div class="form-group">
 						<label for="ingredients" class="form-label">Ingredients</label>
 						<textarea
-								name="ingredients"
-								id="ingredients"
-								class="form-control ckeditor"
-								rows="6"
-								required
-						>{{ recipe.ingredients }}</textarea>
+								name="ingredients" id="ingredients" class="form-control ckeditor" rows="6"
+								required>{{ recipe.ingredients }}</textarea>
 					</div>
-
 					<!-- Preparation -->
-					<div class="mb-3">
+					<div class="form-group">
 						<label for="preparation" class="form-label">Preparation</label>
 						<textarea
-								name="preparation"
-								id="preparation"
-								class="form-control ckeditor"
-								rows="6"
-								required
-						>{{ recipe.preparation }}</textarea>
+								name="preparation" id="preparation" class="form-control ckeditor" rows="6"
+								required>{{ recipe.preparation }}</textarea>
 					</div>
 				</form>
 			</div>
 			<div class="card-footer">
-				<button type="submit" class="btn btn-primary w-100" form="user_update_recipe_form">
-					Submit
-				</button>
+				<button type="submit" class="btn btn-primary w-100" form="user_update_recipe_form"> Submit</button>
 			</div>
 		</div>
 	</div>

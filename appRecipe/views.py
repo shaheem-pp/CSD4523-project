@@ -182,6 +182,7 @@ def update_recipe(request, slug):
         about = request.POST.get("about")
         ingredients = request.POST.get("ingredients")
         preparation = request.POST.get("preparation")
+        image = request.FILES.get("image")
 
         if name and name != recipe.name:
             recipe.name = name
@@ -209,6 +210,10 @@ def update_recipe(request, slug):
         if preparation and preparation != recipe.preparation:
             recipe.preparation = preparation
             fields_updated.append("Preparation")
+
+        if image:
+            recipe.image = image  # Save the uploaded image
+            fields_updated.append("Image")
 
         if fields_updated:
             recipe.save()
