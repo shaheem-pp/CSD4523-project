@@ -67,11 +67,11 @@
 						{% if user.is_authenticated and user.image %}
 							<img
 									src="{{ user.image.url }}" alt="user_image"
-									style="width: 3rem; height: 3rem; border-radius: 1rem;">
+									style="width: 3rem; height: 3rem; border-radius: 1rem; object-fit: cover">
 						{% else %}
 							<img
 									src="{% static 'user/default.jpg' %}" alt="avatar_image"
-									style="width: 3rem; height: 3rem; border-radius: 1rem;">
+									style="width: 3rem; height: 3rem; border-radius: 1rem; object-fit: cover">
 						{% endif %}
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" style="max-width: 100vw; overflow-x: hidden;">

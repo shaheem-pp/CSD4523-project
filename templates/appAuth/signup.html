@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+	<style>
+        /* You can add any custom styles here */
+	</style>
+{% endblock style %}
+
+{% block content %}
+	<div class="mx-auto my-5 w-75">
+		<div class="card">
+			<div class="card-header">
+				<h1 class="display-5 text-center">Signup</h1>
+			</div>
+			<form method="POST" enctype="multipart/form-data">
+				<div class="card-body">
+					{% csrf_token %}
+					<div class="form-group">
+						{{ form.name.label }}
+						{{ form.name }}
+					</div>
+					<div class="form-group">
+						{{ form.email.label }}
+						{{ form.email }}
+					</div>
+					<div class="form-group">
+						{{ form.password.label }}
+						{{ form.password }}
+					</div>
+					<div class="form-group">
+						{{ form.image.label }}
+						{{ form.image }}
+					</div>
+					<div class="form-group">
+						{{ form.enter_code.label }}
+						{{ form.enter_code }}
+						<p id="verification_message" style="display: none;" class="text-success">Code Verified!</p>
+						<p id="failure_message" style="display: none;" class="text-danger">Invalid Code!</p>
+					</div>
+					<div class="form-group" id="designation_form_group">
+						{{ form.designation.label }}
+						{{ form.designation }}
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="">
+						<button type="submit" class="btn btn-primary w-100">Signup</button>
+					</div>
+					<p>You have an account? <a href="/auth/login/">Login</a></p>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock content %}
+
+{% block script %}
+	<script>
+        $(document).ready(function () {
+            var timeout;
+
+            // Initially hide the designation form group
+            $("#designation_form_group").hide();
+
+            // Monitor input field for changes
+            $('#id_enter_code').on('input', function () {
+                // Clear the previous timeout to trigger after 1 second delay
+                clearTimeout(timeout);
+
+                timeout = setTimeout(function () {
+                    var code = $('#id_enter_code').val();
+
+                    console.log(code);
+
+                    // Send AJAX request to verify code
+                    $.ajax({
+                        url: '/auth/verify_code/',  // Django URL to verify code
+                        method: 'POST',
+                        data: {
+                            code: code,
+                            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+                        },
+                        success: function (response) {
+                            if (response.is_valid) {
+                                // Show the designation form and add 'required' attribute
+                                $("#designation_form_group").show().attr("required", "required");
+                                $('#verification_message').show();
+                                $('#failure_message').hide();
+                            } else if (code == "") {
+                                // Hide if code is cleared
+                                $("#designation_form_group").hide().removeAttr("required");
+                                $('#failure_message').hide();
+                                $('#verification_message').hide();
+                                $("#id_designation").text("")
+                            } else {
+                                // Show failure message for invalid code
+                                $("#designation_form_group").hide().removeAttr("required");
+                                $('#verification_message').hide();
+                                $('#failure_message').show();
+                                $("#id_designation").text("")
+                            }
+                        },
+                        error: function () {
+                            // Handle error and reset fields accordingly
+                            $("#designation_form_group").hide().removeAttr("required");
+                            $("#id_designation").text("")
+                            if (code == "") {
+                                $('#failure_message').hide();
+                                $('#verification_message').hide();
+                            } else {
+                                $('#failure_message').show();
+                            }
+                        }
+                    });
+                }, 500); // Delay 1 second after typing stops
+            });
+
+            // When input field is focused and cleared, hide messages
+            $('#id_enter_code').on('focus', function () {
+                var code = $(this).val();
+                if (code === "") {
+                    $('#verification_message').hide().removeAttr('required');
+                    $('#failure_message').hide();
+                }
+            });
+        });
+	</script>
+{% endblock script %}

@@ -3,29 +3,31 @@
 
 {% block style %}
 	<style>
-
+	
 	</style>
 {% endblock style %}
 
 {% block content %}
-
-	<div class="center-hv w-75">
+	
+	<div class="mx-auto my-5 w-75">
 		<div class="card">
 			<div class="card-header">
 				<h1 class="display-5 text-center">Login</h1>
 			</div>
-			<form role="form" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-				<div class="card-body">
-					{% csrf_token %}
-					{{ form }}
-					<p>New User? <a href="#">Create an Account</a></p>
-				</div>
-				<div class="card-footer">
-					<div class="">
-						<button type="submit" class="btn btn-primary w-100">Login</button>
+			<div class="card-body">
+				<form role="form" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+					<div class="card-body">
+						{% csrf_token %}
+						{{ form }}
+						<p>New User? <a href="{% url 'signup' %}">Create an Account</a></p>
 					</div>
-				</div>
-			</form>
+					<div class="card-footer">
+						<div class="">
+							<button type="submit" class="btn btn-primary w-100">Login</button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 
