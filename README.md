@@ -1,7 +1,9 @@
 # About ReciMe
 
 **ReciMe** is a collaborative recipe-sharing platform built as part of the **final project** for the course **2024F CSD
-4523 6 Python II**. Developed by
+4523 6 Python II**.
+
+### Developed by
 
 1. **Hardee Manishkumar Raval (C0946490)**
 2. **Thrisha Selvaraj (C0941392)**
@@ -9,7 +11,11 @@
 
 This app is designed to bring food lovers, aspiring chefs, and culinary experts together in one vibrant community.
 
-## Key Features:
+### URL
+
+[YouTube - Presentation](URL)
+
+### Key Features:
 
 1. **Discover Recipes**: Explore a wide variety of recipes with detailed instructions, ingredients, and optional images
    to inspire your next meal.
@@ -22,7 +28,7 @@ This app is designed to bring food lovers, aspiring chefs, and culinary experts 
 5. **Interactive Community**: ReciMe promotes collaboration and engagement among users, offering an inclusive platform
    for food enthusiasts of all levels.
 
-## Why ReciMe?
+### Why ReciMe?
 
 ReciMe is not just about recipes—it's about creating a community where people can share their culinary adventures, learn
 from each other, and celebrate their love for food. Whether you’re a casual cook, an experimental foodie, or a
@@ -33,6 +39,8 @@ user interaction, bookmarking, chef-curated content, and community-driven feedba
 
 We hope ReciMe becomes your go-to app for sharing and discovering recipes. Bon appétit!
 
+## Setup
+
 ### 1. Clone the Repository
 
 ```bash
@@ -42,7 +50,7 @@ cd CSD4523-project
 
 ### 2. Set Up Environment Variables
 
-Create a `.env` file in the project directory and populate it with your project-specific values:
+Create a `.env` file in the project directory and Setup like below:
 
 ```env
 SECRET_KEY=Your Django project's secret key (use the generated key)
@@ -98,9 +106,3 @@ python manage.py runserver
 10 directories, 5 files
 
 ```
-
-## Author
-
-1. Hardee Manishkumar Raval - C0946490
-2. Thrisha Selvaraj - C0941392
-3. Shaheem Puzhuthini Para - C0935469

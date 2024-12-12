@@ -92,13 +92,17 @@
 						<button type="submit" class="btn btn-sm btn-danger" form="delete_review_form">Delete</button>
 					</div>
 				{% else %}
-					<form action="/user/recipe/{{ recipe.slug }}/add_review/" method="POST">
-						{% csrf_token %}
-						<textarea
-								name="review" class="form-control" placeholder="Write your review here..."
-								required></textarea>
-						<button type="submit" class="btn btn-sm btn-primary mt-2">Submit</button>
-					</form>
+					{% if user.is_authenticated %}
+						<form action="/user/recipe/{{ recipe.slug }}/add_review/" method="POST">
+							{% csrf_token %}
+							<textarea
+									name="review" class="form-control" placeholder="Write your review here..."
+									required></textarea>
+							<button type="submit" class="btn btn-sm btn-primary mt-2">Submit</button>
+						</form>
+					{% else %}
+						<a href="/auth/login/"><h5>Login to add review.</h5></a>
+					{% endif %}
 				{% endif %}
 				<div class="reviews-section mt-4">
 					<h4>Reviews</h4>
