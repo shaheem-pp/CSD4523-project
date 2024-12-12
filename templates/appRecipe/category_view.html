@@ -52,72 +52,87 @@
 	<div class="container pb-5">
 		<h1 class="display-5 text-center mb-5">{{ category.name }}</h1>
 		<img class="mb-3" src="{{ category.image.url }}" style="width: 100%; height: 50vh; object-fit: cover" alt="">
-		<h1 class="display-6 text-center mb-3 mt-5">Find your Favourite Recipe<span class="text-danger"><i
-				class="fa-solid fa-heart"></i></span></h1>
-		<div class="row">
-			{% for recipe in recipes %}
-				<div class="col col-md-6 p-1">
-					<div class="card h-100">
-						<a href="{% url 'recipe-view' recipe.slug %}">
-							<div class="image-container w-100">
-								<img
-										src="{{ recipe.image.url }}" class="card-img-top" alt="recipe_image"
-										style=" width: 100%; height: 50vh; object-fit: cover">
-								<div class="overlay">
-									{#									<i class="fa-solid fa-magnifying-glass-plus"></i>#}
-									{#									<br>#}
-									<h1 class="display-4 text-white text-center p-2 wrap_text w-100"><i
-											class="fa-solid fa-magnifying-glass-plus"></i><br>{{ recipe.name }}</h1>
+		{% if recipes.count > 0 %}
+			<h1 class="display-6 text-center mb-3 mt-5">Find your Favourite Recipe<span class="text-danger"><i
+					class="fa-solid fa-heart"></i></span></h1>
+			<div class="row">
+				{% for recipe in recipes %}
+					<div class="col col-md-6 p-1">
+						<div class="card h-100">
+							<a href="{% url 'recipe-view' recipe.slug %}">
+								<div class="image-container w-100">
+									<img
+											src="{{ recipe.image.url }}" class="card-img-top" alt="recipe_image"
+											style=" width: 100%; height: 50vh; object-fit: cover">
+									<div class="overlay">
+										{#									<i class="fa-solid fa-magnifying-glass-plus"></i>#}
+										{#									<br>#}
+										<h1 class="display-4 text-white text-center p-2 wrap_text w-100"><i
+												class="fa-solid fa-magnifying-glass-plus"></i><br>{{ recipe.name }}</h1>
+									</div>
 								</div>
-							</div>
-						</a>
-						{#						<div class="card-body">#}
-						{#							<h5 class="card-title">{{ recipe.name }}</h5>#}
-						{#							<p class="card-text three-lines">{{ recipe.about }}</p>#}
-						{#							<p class="card-text">Author: {{ recipe.author }}</p>#}
-						{#						</div>#}
-						{#						<div class="card-footer text-end">#}
-						{#							<div>#}
-						{#								{% if user.is_authenticated %}#}
-						{#									{% csrf_token %}#}
-						{#									{% if recipe.is_liked %}#}
-						{#										<a#}
-						{#												href="javascript:void(0);" class="btn btn-sm btn-light like-btn"#}
-						{#												data-recipe-id="{{ recipe.id }}">#}
-						{#											<i class="fa-solid fa-heart text-danger"></i> {{ recipe.like_count }}#}
-						{#										</a>#}
-						{#									{% else %}#}
-						{#										<a#}
-						{#												href="javascript:void(0);"#}
-						{#												class="btn btn-sm btn-light like-btn"#}
-						{#												data-recipe-id="{{ recipe.id }}">#}
-						{#											<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}#}
-						{#										</a>#}
-						{#									{% endif %}#}
-						{##}
-						{#									{% if recipe.is_bookmarked %}#}
-						{#										<a#}
-						{#												href="javascript:void(0);" class="btn btn-sm btn-light bookmark-btn"#}
-						{#												data-recipe-id="{{ recipe.id }}">#}
-						{#											<i class="fa-solid fa-bookmark"></i>#}
-						{#										</a>#}
-						{#									{% else %}#}
-						{#										<a#}
-						{#												href="javascript:void(0);"#}
-						{#												class="btn btn-sm btn-light bookmark-btn"#}
-						{#												data-recipe-id="{{ recipe.id }}">#}
-						{#											<i class="fa-regular fa-bookmark"></i>#}
-						{#										</a>#}
-						{#									{% endif %}#}
-						{#								{% else %}#}
-						{#									<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}#}
-						{#								{% endif %}#}
-						{#							</div>#}
-						{#						</div>#}
+							</a>
+							{#						<div class="card-body">#}
+							{#							<h5 class="card-title">{{ recipe.name }}</h5>#}
+							{#							<p class="card-text three-lines">{{ recipe.about }}</p>#}
+							{#							<p class="card-text">Author: {{ recipe.author }}</p>#}
+							{#						</div>#}
+							{#						<div class="card-footer text-end">#}
+							{#							<div>#}
+							{#								{% if user.is_authenticated %}#}
+							{#									{% csrf_token %}#}
+							{#									{% if recipe.is_liked %}#}
+							{#										<a#}
+							{#												href="javascript:void(0);" class="btn btn-sm btn-light like-btn"#}
+							{#												data-recipe-id="{{ recipe.id }}">#}
+							{#											<i class="fa-solid fa-heart text-danger"></i> {{ recipe.like_count }}#}
+							{#										</a>#}
+							{#									{% else %}#}
+							{#										<a#}
+							{#												href="javascript:void(0);"#}
+							{#												class="btn btn-sm btn-light like-btn"#}
+							{#												data-recipe-id="{{ recipe.id }}">#}
+							{#											<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}#}
+							{#										</a>#}
+							{#									{% endif %}#}
+							{##}
+							{#									{% if recipe.is_bookmarked %}#}
+							{#										<a#}
+							{#												href="javascript:void(0);" class="btn btn-sm btn-light bookmark-btn"#}
+							{#												data-recipe-id="{{ recipe.id }}">#}
+							{#											<i class="fa-solid fa-bookmark"></i>#}
+							{#										</a>#}
+							{#									{% else %}#}
+							{#										<a#}
+							{#												href="javascript:void(0);"#}
+							{#												class="btn btn-sm btn-light bookmark-btn"#}
+							{#												data-recipe-id="{{ recipe.id }}">#}
+							{#											<i class="fa-regular fa-bookmark"></i>#}
+							{#										</a>#}
+							{#									{% endif %}#}
+							{#								{% else %}#}
+							{#									<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}#}
+							{#								{% endif %}#}
+							{#							</div>#}
+							{#						</div>#}
+						</div>
 					</div>
-				</div>
-			{% endfor %}
-		</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			{% if user.is_authenticated %}
+				<h1 class="text-center my-5">Seems like we don't have anything here🙁. <br>
+				                             Why don't you <a href="{% url 'create-recipe' %}">write
+				                                                                               a {{ category.name }}
+				                                                                               dish😇?</a>
+				</h1>
+			{% else %}
+				<h1 class="text-center my-5">Seems like we don't have anything here🙁. <br>
+				                             Why don't you <a href="{% url 'login' %}">Login to write
+				                                                                       a {{ category.name }} dish😇?</a>
+				</h1>
+			{% endif %}
+		{% endif %}
 	</div>
 {% endblock content %}
 
