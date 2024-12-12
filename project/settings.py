@@ -3,6 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import environ
+from django.contrib.messages import constants as messages
 
 # Initialize environment variables
 env = environ.Env(DEBUG=(bool, False), USE_TZ=(bool, True), TIME_ZONE=(str, "UTC"))
@@ -113,3 +114,10 @@ AUTH_USER_MODEL = "appAuth.CustomUser"
 # SECURE_SSL_REDIRECT = True
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+
+MESSAGE_TAGS = {
+    messages.INFO: "alert-info",
+    messages.SUCCESS: "alert-success",
+    messages.ERROR: "alert-danger",
+}
