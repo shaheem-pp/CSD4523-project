@@ -3,6 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import environ
+from django.contrib.messages import constants as messages
 
 # Initialize environment variables
 env = environ.Env(DEBUG=(bool, False), USE_TZ=(bool, True), TIME_ZONE=(str, "UTC"))
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     "appRecipe",
     "appUser",
     "crispy_forms",
+    "ckeditor",
 ]
 
 MIDDLEWARE = [
@@ -113,3 +115,37 @@ AUTH_USER_MODEL = "appAuth.CustomUser"
 # SECURE_SSL_REDIRECT = True
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+
+MESSAGE_TAGS = {
+    messages.INFO: "alert-info",
+    messages.SUCCESS: "alert-success",
+    messages.ERROR: "alert-danger",
+}
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            ["Paragraph Format", "Block Quote"],
+            [
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source", "Preview"],
+        ],
+        "width": "100%",
+        "height": "25rem",
+    },
+}
+CKEDITOR_UPLOAD_PATH = "uploads/"

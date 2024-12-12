@@ -2,117 +2,65 @@
 {% load static %}
 
 {% block style %}
-	<style>
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
 
-        .card-img-top {
-            width: 100%;
-            transition: transform 0.3s ease; /* For scaling effect */
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Transparent black overlay */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 1; /* Overlay is visible by default */
-            transition: opacity 0.3s ease; /* For fading effect */
-        }
-
-        .overlay i {
-            color: white; /* Icon color */
-            font-size: 2rem; /* Icon size */
-            transition: opacity 0.3s ease;
-        }
-
-        .image-container:hover .card-img-top {
-            transform: scale(1.02); /* Image scales up */
-        }
-
-        .image-container:hover .overlay {
-            opacity: 0; /* Overlay disappears on hover */
-        }
-	</style>
 {% endblock style %}
 
 
 {% block content %}
-
 	<div
 			class="alert alert-info" role="alert"
 			style="position: fixed; top: 5%; right: 5%; transform: translate(-5%, -5%); z-index: 10"></div>
-	<div class="container">
-		<h1 class="display-6 text-center">Find your Favourite Recipe<span class="text-danger"><i
-				class="fa-solid fa-heart"></i></span></h1>
+	<div class="container py-3">
+		<h1 class="display-4 text-center">{{ recipe.name }}</h1>
+		<h5 class="text-center">By {{ recipe.author }}</h5>
+		<img class="mb-3" src="{{ recipe.image.url }}" style="width: 100%; height: 50vh; object-fit: cover" alt="">
 		<div class="row">
-			{% for recipe in recipes %}
-				<div class="col col-md-3 p-2">
-					<div class="card h-100">
-						<a href="{% url 'recipe-view' recipe.slug %}">
-							<div class="image-container w-100">
-								<img
-										src="{{ recipe.image.url }}" class="card-img-top" alt="recipe_image"
-										style=" width: 100%; height: 20vh; object-fit: cover">
-								<div class="overlay">
-									<i class="fa-solid fa-magnifying-glass-plus"></i>
-								</div>
-							</div>
+			<div class="col col-md-6">
+				Category: {{ recipe.category }}
+			</div>
+			<div class="col col-md-6 text-end">
+				{% if user.is_authenticated %}
+					{% csrf_token %}
+					{% if is_liked %}
+						<a
+								href="javascript:void(0);" class="btn btn-sm btn-light like-btn"
+								data-recipe-id="{{ recipe.id }}">
+							<i class="fa-solid fa-heart text-danger"></i> {{ like_count }}
 						</a>
-						<div class="card-body">
-							<h5 class="card-title">{{ recipe.name }}</h5>
-							<p class="card-text three-lines">{{ recipe.about }}</p>
-							<p class="card-text">Author: {{ recipe.author }}</p>
-						</div>
-						<div class="card-footer text-end">
-							<div>
-								{% if user.is_authenticated %}
-									{% csrf_token %}
-									{% if recipe.is_liked %}
-										<a
-												href="javascript:void(0);" class="btn btn-sm btn-light like-btn"
-												data-recipe-id="{{ recipe.id }}">
-											<i class="fa-solid fa-heart text-danger"></i> {{ recipe.like_count }}
-										</a>
-									{% else %}
-										<a
-												href="javascript:void(0);"
-												class="btn btn-sm btn-light like-btn"
-												data-recipe-id="{{ recipe.id }}">
-											<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}
-										</a>
-									{% endif %}
-
-									{% if recipe.is_bookmarked %}
-										<a
-												href="javascript:void(0);" class="btn btn-sm btn-light bookmark-btn"
-												data-recipe-id="{{ recipe.id }}">
-											<i class="fa-solid fa-bookmark"></i>
-										</a>
-									{% else %}
-										<a
-												href="javascript:void(0);"
-												class="btn btn-sm btn-light bookmark-btn"
-												data-recipe-id="{{ recipe.id }}">
-											<i class="fa-regular fa-bookmark"></i>
-										</a>
-									{% endif %}
-								{% else %}
-									<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
+					{% else %}
+						<a
+								href="javascript:void(0);"
+								class="btn btn-sm btn-light like-btn"
+								data-recipe-id="{{ recipe.id }}">
+							<i class="fa-regular fa-heart"></i> {{ like_count }}
+						</a>
+					{% endif %}
+					&nbsp;
+					{% if is_bookmarked %}
+						<a
+								href="javascript:void(0);" class="btn btn-sm btn-light bookmark-btn"
+								data-recipe-id="{{ recipe.id }}">
+							<i class="fa-solid fa-bookmark"></i>
+						</a>
+					{% else %}
+						<a
+								href="javascript:void(0);"
+								class="btn btn-sm btn-light bookmark-btn"
+								data-recipe-id="{{ recipe.id }}">
+							<i class="fa-regular fa-bookmark"></i>
+						</a>
+					{% endif %}
+				{% else %}
+					<i class="fa-regular fa-heart"></i> {{ like_count }}
+				{% endif %}
+			</div>
 		</div>
+		<h3>About</h3>
+		<p>{{ recipe.about | safe }}</p>
+		<h3>Ingredients</h3>
+		<p>{{ recipe.ingredients | safe }}</p>
+		<h3>Preparation</h3>
+		<p>{{ recipe.preparation | safe }}</p>
 	</div>
 {% endblock content %}
 
@@ -120,10 +68,11 @@
 	<script>
         $(document).ready(function () {
 
-            $(".alert").hide()
+            $(".alert").hide();
 
             // Like button click event
             $('.like-btn').click(function () {
+                $(".alert").hide();
                 console.log(".like-btn called");
                 var recipeId = $(this).data('recipe-id');
                 var likeButton = $(this);
@@ -159,6 +108,7 @@
 
             // Bookmark button click event
             $('.bookmark-btn').click(function () {
+                $(".alert").hide();
                 console.log(".bookmark-btn called");
                 var recipeId = $(this).data('recipe-id');
                 var bookmarkButton = $(this);
@@ -190,6 +140,5 @@
                 });
             });
         });
-
 	</script>
 {% endblock script %}

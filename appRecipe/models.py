@@ -22,8 +22,18 @@ def get_random_string():
 
 
 class Category(models.Model):
+
+    def get_file_path(instance, filename):
+        ext = filename.split(".")[-1]
+        tmp = get_random_string()
+        filename = f"{tmp}.{ext}"
+        return os.path.join("category", filename)
+
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
+    image = models.ImageField(
+        upload_to=get_file_path, null=True, blank=True, default="category/default.jpg"
+    )
     created_on = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
 

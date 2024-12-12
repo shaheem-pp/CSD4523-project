@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+	<style>
+        .django-ckeditor-widget {
+            width: 100%;
+        }
+	</style>
+{% endblock style %}
+
+
+{% block content %}
+
+	<div
+			class="alert alert-info" role="alert"
+			style="position: fixed; top: 5%; right: 5%; transform: translate(-5%, -5%); z-index: 10"></div>
+	<div class="container p-5">
+
+		<form method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% for field in form %}
+				<div class="mb-4">
+					<label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+					<br>
+					{{ field }}
+					{% if field.errors %}
+						<div class="text-danger">
+							{{ field.errors }}
+						</div>
+					{% endif %}
+				</div>
+			{% endfor %}
+			<button type="submit" class="btn btn-primary">Save</button>
+		</form>
+
+
+	</div>
+{% endblock content %}
+
+{% block script %}
+	<script>
+        $(document).ready(function () {
+
+            $(".alert").hide()
+        });
+	</script>
+{% endblock script %}
