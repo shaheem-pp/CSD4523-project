@@ -1,13 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from appAuth.forms import LoginForm, CustomUserForm
-
-
-# Create your views here.
 
 
 def login(request):
@@ -44,19 +40,18 @@ def signout(request):
     return redirect("home")
 
 
-def verify_chef(request):
-    valid_codes = ["CHEF12", "45CHE6", "FEED10"]
-
-    if request.method == "POST":
-        code = request.POST.get("code", "").strip()
-
-        # Check if the entered code is valid
-        if code in valid_codes:
-            return JsonResponse({"is_valid": True})
-        else:
-            return JsonResponse({"is_valid": False})
-
-    return JsonResponse({"is_valid": False})
+# def verify_chef(request):
+#
+#     if request.method == "POST":
+#         code = request.POST.get("code", "").strip()
+#
+#         # Check if the entered code is valid
+#         if code in VALID_CODES:
+#             return JsonResponse({"is_valid": True})
+#         else:
+#             return JsonResponse({"is_valid": False})
+#
+#     return JsonResponse({"is_valid": False})
 
 
 def signup(request):
@@ -65,13 +60,9 @@ def signup(request):
         if form.is_valid():
             user = form.save(commit=False)
 
-            # If the user is a chef, the 'designation' field will be required
-            if user.user_type == 3:
-                designation = form.cleaned_data.get("designation")
-                if not designation:
-                    form.add_error("designation", "Designation is required for chefs.")
-                    return render(request, "appAuth/signup.html", {"form": form})
-                user.designation = designation
+            # if 'enter_code' in form.cleaned_data:
+            #     if user.designation and form.cleaned_data["enter_code"] in VALID_CODES:
+            #         user.user_type = 3
 
             # Set password
             user.set_password(form.cleaned_data["password"])
@@ -89,6 +80,7 @@ def signup(request):
             else:
                 messages.error(request, "Invalid email or password.")
         else:
+            messages.error(request, "Form is not valid. Please check your input.")
             return render(request, "appAuth/signup.html", {"form": form})
     else:
         form = CustomUserForm()
