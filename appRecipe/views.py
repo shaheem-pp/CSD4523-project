@@ -159,7 +159,7 @@ def update_recipe(request, slug):
     context = get_common_context()
 
     if request.method == "POST":
-
+        pass
     else:
         form = RecipeUpdateForm(instance=recipe)
 
@@ -175,10 +175,6 @@ def remove_recipe(request, slug):
         recipe.is_deleted = True  # Mark as deleted
         recipe.save()
         messages.success(request, "Recipe has been removed!")
-        return redirect(
-            "settings_my_recipes"
-        )
+        return redirect("settings_my_recipes")
 
-    return redirect(
-        "settings_my_recipes"
-    )
+    return redirect("settings_my_recipes")
