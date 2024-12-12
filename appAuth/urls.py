@@ -1,7 +1,8 @@
 from django.urls import path
 
-from appAuth.views import login
+from appAuth import views
 
 urlpatterns = [
-    path("/login/", login, name="login"),
+    path("/login/", views.login, name="login"),
+    path("/signout/", views.signout, name="signout"),
 ]

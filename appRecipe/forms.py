@@ -1,7 +1,7 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 
-from appRecipe.models import Recipe
+from appRecipe.models import Recipe, Category
 from customUtils import BootstrapFormMixin
 
 
@@ -15,3 +15,7 @@ class RecipeCreateForm(BootstrapFormMixin, forms.ModelForm):
         widgets = {
             "category": forms.Select(attrs={"class": "form-select"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["category"].queryset = Category.objects.filter(is_deleted=False)
