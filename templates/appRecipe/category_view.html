@@ -71,53 +71,14 @@
 										{#									<i class="fa-solid fa-magnifying-glass-plus"></i>#}
 										{#									<br>#}
 										<h1 class="display-4 text-white text-center p-2 wrap_text w-100"><i
-												class="fa-solid fa-magnifying-glass-plus"></i><br>{{ recipe.name }}</h1>
+												class="fa-solid fa-magnifying-glass-plus"></i><br>{{ recipe.name }}
+											{% if recipe.author.user_type == 3 %}
+												<br>
+												<span class="badge rounded-pill text-bg-info m-0 fs-6">Chef's Special</span>{% endif %}
+										</h1>
 									</div>
 								</div>
 							</a>
-							{#						<div class="card-body">#}
-							{#							<h5 class="card-title">{{ recipe.name }}</h5>#}
-							{#							<p class="card-text three-lines">{{ recipe.about }}</p>#}
-							{#							<p class="card-text">Author: {{ recipe.author }}</p>#}
-							{#						</div>#}
-							{#						<div class="card-footer text-end">#}
-							{#							<div>#}
-							{#								{% if user.is_authenticated %}#}
-							{#									{% csrf_token %}#}
-							{#									{% if recipe.is_liked %}#}
-							{#										<a#}
-							{#												href="javascript:void(0);" class="btn btn-sm btn-light like-btn"#}
-							{#												data-recipe-id="{{ recipe.id }}">#}
-							{#											<i class="fa-solid fa-heart text-danger"></i> {{ recipe.like_count }}#}
-							{#										</a>#}
-							{#									{% else %}#}
-							{#										<a#}
-							{#												href="javascript:void(0);"#}
-							{#												class="btn btn-sm btn-light like-btn"#}
-							{#												data-recipe-id="{{ recipe.id }}">#}
-							{#											<i class="fa-regular fa-heart"></i> {{ recipe.like_count }}#}
-							{#										</a>#}
-							{#									{% endif %}#}
-							{##}
-							{#									{% if recipe.is_bookmarked %}#}
-							{#										<a#}
-							{#												href="javascript:void(0);" class="btn btn-sm btn-light bookmark-btn"#}
-							{#												data-recipe-id="{{ recipe.id }}">#}
-							{#											<i class="fa-solid fa-bookmark"></i>#}
-							{#										</a>#}
-							{#									{% else %}#}
-							{#										<a#}
-							{#												href="javascript:void(0);"#}
-							{#												class="btn btn-sm btn-light bookmark-btn"#}
-							{#												data-recipe-id="{{ recipe.id }}">#}
-							{#											<i class="fa-regular fa-bookmark"></i>#}
-							{#										</a>#}
-							{#									{% endif %}#}
-							{#								{% else %}#}
-							{#									<i class="fa-solid fa-heart"></i> {{ recipe.like_count }}#}
-							{#								{% endif %}#}
-							{#							</div>#}
-							{#						</div>#}
 						</div>
 					</div>
 				{% endfor %}

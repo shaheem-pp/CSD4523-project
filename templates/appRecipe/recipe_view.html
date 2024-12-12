@@ -19,6 +19,8 @@
 				Category: {{ recipe.category }}
 			</div>
 			<div class="col col-md-6 text-end">
+				{% if recipe.author.user_type == 3 %}
+					<span class="badge rounded-pill text-bg-info m-0">Chef's Special</span>{% endif %}
 				{% if user.is_authenticated %}
 					{% csrf_token %}
 					{% if is_liked %}
