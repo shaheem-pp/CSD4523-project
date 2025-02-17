@@ -5,15 +5,12 @@
 
 ### Developed by
 
-1. **Hardee Manishkumar Raval (C0946490)**
-2. **Thrisha Selvaraj (C0941392)**
-3. **Shaheem Puzhuthini Para (C0935469)**
+1. **Hardee Manishkumar Raval**
+2. **Thrisha Selvaraj**
+3. **Shaheem Puzhuthini Para**
 
 This app is designed to bring food lovers, aspiring chefs, and culinary experts together in one vibrant community.
 
-### URL
-
-[YouTube - Presentation - https://youtu.be/PAoJ3Gwr8EI](https://youtu.be/PAoJ3Gwr8EI)
 
 ### Key Features:
 
